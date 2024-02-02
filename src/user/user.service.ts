@@ -14,11 +14,15 @@ export class UserService {
   }
 
   async findUserById(dto: findUserByIdDto) {
-    const user = await this.prisma.user.findUnique({
+    const { id } = dto;
+
+    const user = await this.prisma.user.findFirst({
       where: {
-        id: dto.id,
+        id,
       },
+      select: { id: true, email: true },
     });
+
     if (!user) {
       throw new HttpException(
         `Пользователя с id:${dto.id} не существует`,

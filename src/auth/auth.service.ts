@@ -1,23 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Prisma, User } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { PrismaService } from "src/prisma.service";
 import { UserService } from "src/user/user.service";
 import { generateTokenDto } from "./dto/generateTokenDto";
+import { getCurrentUserDto } from "./dto/getCurrentUserDto";
+import { loginUserDto } from "./dto/loginUserDto";
 import { registerUserDto } from "./dto/registerUserDto";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private prisma: PrismaService,
-    private userService: UserService
-  ) {}
+  constructor(private userService: UserService) {}
 
   async generateToken(dto: generateTokenDto) {
     const payload = { ...dto };
 
-    const token = jwt.sign(payload, "Secret-key");
+    const token = jwt.sign(payload, process.env.SECRET_KEY);
 
     return token;
   }
@@ -41,15 +38,38 @@ export class AuthService {
         email: dto.email,
         password: hashedPassword,
       });
+
       return this.generateToken(user);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async loginUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.findUnique({
-      where: { email: data.email },
-    });
+  async loginUser(dto: loginUserDto) {
+    const user = await this.userService.findUserByEmail({ email: dto.email });
+
+    if (!user) {
+      throw new HttpException(
+        "Пользователь с таким email не зарегестрирован",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const matchedPassword = await bcrypt.compare(dto.password, user.password);
+    let token;
+
+    if (matchedPassword) {
+      token = await this.generateToken(dto);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userData } = user;
+    return { token, ...userData };
+  }
+
+  async getCurrentUser(dto: getCurrentUserDto) {
+    const user = await this.userService.findUserById({ id: dto.id });
+
+    return user;
   }
 }
