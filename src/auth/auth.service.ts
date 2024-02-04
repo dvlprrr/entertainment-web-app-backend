@@ -39,7 +39,10 @@ export class AuthService {
         password: hashedPassword,
       });
 
-      return this.generateToken(user);
+      return {
+        message: "User has been successfully created",
+        user,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +69,6 @@ export class AuthService {
     const { password, ...userData } = user;
     return { token, ...userData };
   }
-
   async getCurrentUser(dto: getCurrentUserDto) {
     const user = await this.userService.findUserById({ id: dto.id });
 
