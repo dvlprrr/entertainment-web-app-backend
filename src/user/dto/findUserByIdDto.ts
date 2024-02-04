@@ -1,3 +1,3 @@
 export interface findUserByIdDto {
-  id: number;
+  id: bigint;
 }
