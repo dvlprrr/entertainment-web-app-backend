@@ -1,3 +1,3 @@
 export interface getCurrentUserDto {
-  id: bigint;
+  id: number;
 }

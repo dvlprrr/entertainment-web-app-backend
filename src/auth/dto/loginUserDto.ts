@@ -1,5 +1,5 @@
 export interface loginUserDto {
-  id: bigint;
+  id: number;
   email: string;
   password: string;
 }

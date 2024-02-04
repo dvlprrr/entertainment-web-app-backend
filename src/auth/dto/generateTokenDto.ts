@@ -1,5 +1,5 @@
 export interface generateTokenDto {
-  id: bigint;
+  id: number;
   email: string;
   password: string;
 }
