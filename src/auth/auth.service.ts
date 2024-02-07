@@ -37,14 +37,15 @@ export class AuthService {
       const user = await this.userService.createUser({
         email: dto.email,
         password: hashedPassword,
+        roleId: dto.roleId ?? 1,
       });
-
+      console.log(user, "USER_SERVICE");
       return {
         message: "User has been successfully created",
         user,
       };
     } catch (error) {
-      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 

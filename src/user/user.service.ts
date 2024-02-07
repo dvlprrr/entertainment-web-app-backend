@@ -10,6 +10,7 @@ export class UserService {
 
   async createUser(dto: createUserDto) {
     const user = await this.prisma.user.create({ data: dto });
+    console.log(user, "USER");
     return user;
   }
 
@@ -20,7 +21,7 @@ export class UserService {
       where: {
         id,
       },
-      select: { id: true, email: true },
+      select: { email: true, id: true, role: true },
     });
 
     if (!user) {
