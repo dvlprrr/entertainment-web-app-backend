@@ -21,13 +21,19 @@ model User {
   role     Role   @relation(fields: [roleId], references: [id])
 }
 
+model FilmType {
+  id    Int     @id @unique @default(autoincrement())
+  type  String  @unique
+  movie Movie[]
+}
+
 model Movie {
   id               Int                @id @unique @default(autoincrement())
-  image            String
+  url              String
   title            String
   year             Int
-  typeid           Int
-  filmType         FilmType           @relation(fields: [typeid], references: [id])
+  typeId           Int
+  filmType         FilmType           @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ageRating        String
   MovieToGenreFilm MovieToGenreFilm[]
 }
@@ -36,12 +42,6 @@ model GenreFilm {
   id               Int                @id @unique @default(autoincrement())
   name             String
   MovieToGenreFilm MovieToGenreFilm[]
-}
-
-model FilmType {
-  id    Int     @id @unique @default(autoincrement())
-  type  String
-  movie Movie[]
 }
 
 model MovieToGenreFilm {

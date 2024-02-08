@@ -23,6 +23,6 @@ export class AuthController {
   getCurrentUser(@Req() req) {
     const user = req.user;
 
-    return this.authService.getCurrentUser({ id: user.id });
+    return this.authService.getCurrentUser(user.id);
   }
 }

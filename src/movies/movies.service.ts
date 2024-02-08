@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma.service";
+import { CreateMovieDto } from "./dto/create-movie.dto";
 
 @Injectable()
 export class MoviesService {
-  create(createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async createMovieCard(dto: CreateMovieDto) {
+    const card = await this.prisma.movie.create({
+      data: {
+        title: dto.title,
+        url: dto.url,
+        year: dto.year,
+        typeId: dto.typeId,
+        ageRating: dto.ageRating,
+      },
+    });
+    return card;
   }
 
-  findAll() {
-    return `This action returns all movies`;
-  }
+  async findAllMovies() {
+    try {
+      const movies = await this.prisma.movie.findMany();
 
-  findOne(id: number) {
-    return `This action returns a #${id} movie`;
-  }
-
-  update(id: number, updateMovieDto: UpdateMovieDto) {
-    return `This action updates a #${id} movie`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} movie`;
+      return movies;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 }

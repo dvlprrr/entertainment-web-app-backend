@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Patch } from "@nestjs/common";
+import { updateUserDto } from "./dto/updateUserDto";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -6,9 +7,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Patch()
-  updateUser(@Body() dto: { id: number; newEmail: string }) {
+  updateUser(@Body() dto: updateUserDto) {
     const { id, newEmail } = dto;
-    const updatedUser = this.userService.updateUser(id, newEmail);
+    const updatedUser = this.userService.updateUser({ id, newEmail });
 
     return updatedUser;
   }
