@@ -20,3 +20,35 @@ model User {
   roleId   Int    @default(1)
   role     Role   @relation(fields: [roleId], references: [id])
 }
+
+model Movie {
+  id               Int                @id @unique @default(autoincrement())
+  image            String
+  title            String
+  year             Int
+  typeid           Int
+  filmType         FilmType           @relation(fields: [typeid], references: [id])
+  ageRating        String
+  MovieToGenreFilm MovieToGenreFilm[]
+}
+
+model GenreFilm {
+  id               Int                @id @unique @default(autoincrement())
+  name             String
+  MovieToGenreFilm MovieToGenreFilm[]
+}
+
+model FilmType {
+  id    Int     @id @unique @default(autoincrement())
+  type  String
+  movie Movie[]
+}
+
+model MovieToGenreFilm {
+  movie       Movie     @relation(fields: [movieId], references: [id])
+  movieId     Int
+  genreFilm   GenreFilm @relation(fields: [genreFilmId], references: [id])
+  genreFilmId Int
+
+  @@id([movieId, genreFilmId])
+}

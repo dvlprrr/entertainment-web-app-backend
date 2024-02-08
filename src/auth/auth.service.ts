@@ -75,4 +75,5 @@ export class AuthService {
 
     return user;
   }
+  async updateCurrentUser() {}
 }

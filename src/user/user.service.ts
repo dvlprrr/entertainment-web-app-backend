@@ -42,4 +42,41 @@ export class UserService {
 
     return user;
   }
+
+  async updateUser(id: number, newEmail: string) {
+    const user = await this.findUserById({ id });
+
+    if (!user) {
+      throw new HttpException(
+        "Пользователь с таким id не зарегестрирован",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: { email: newEmail },
+    });
+
+    return updatedUser;
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.findUserById({ id });
+
+    if (!user) {
+      throw new HttpException(
+        "Пользователь с таким id не зарегестрирован",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const deletedUser = await this.prisma.user.delete({
+      where: { id },
+    });
+    return {
+      message: "Пользователь успешно удален",
+      deletedUser,
+    };
+  }
 }
