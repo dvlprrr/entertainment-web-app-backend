@@ -18,7 +18,6 @@ export class MoviesController {
 
   @Get(":id")
   findMovieById(@Param() id: { id: string }) {
-    console.log(id);
     return this.moviesService.findMovieById(id);
   }
 }

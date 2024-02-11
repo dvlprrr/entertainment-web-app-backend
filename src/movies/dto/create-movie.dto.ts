@@ -4,4 +4,9 @@ export interface CreateMovieDto {
   year: number;
   typeId: number;
   ageRating: string;
+  genre: [
+    {
+      id: number;
+    },
+  ];
 }

@@ -28,27 +28,18 @@ model FilmType {
 }
 
 model Movie {
-  id               Int                @id @unique @default(autoincrement())
-  url              String
-  title            String
-  year             Int
-  typeId           Int
-  filmType         FilmType           @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ageRating        String
-  MovieToGenreFilm MovieToGenreFilm[]
+  id        Int         @id @unique @default(autoincrement())
+  url       String
+  title     String
+  year      Int
+  typeId    Int
+  filmType  FilmType    @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ageRating String
+  genreFilm GenreFilm[]
 }
 
 model GenreFilm {
-  id               Int                @id @unique @default(autoincrement())
-  name             String
-  MovieToGenreFilm MovieToGenreFilm[]
-}
-
-model MovieToGenreFilm {
-  movie       Movie     @relation(fields: [movieId], references: [id])
-  movieId     Int
-  genreFilm   GenreFilm @relation(fields: [genreFilmId], references: [id])
-  genreFilmId Int
-
-  @@id([movieId, genreFilmId])
+  id    Int     @id @unique @default(autoincrement())
+  name  String
+  Movie Movie[]
 }
