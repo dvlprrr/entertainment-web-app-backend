@@ -28,7 +28,7 @@ model FilmType {
 }
 
 model Movie {
-  id        Int         @id @unique @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   url       String
   title     String
   year      Int
@@ -40,6 +40,6 @@ model Movie {
 
 model GenreFilm {
   id    Int     @id @unique @default(autoincrement())
-  name  String
+  name  String  @unique
   Movie Movie[]
 }

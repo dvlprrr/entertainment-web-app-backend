@@ -8,6 +8,7 @@ export class MoviesService {
 
   async createMovieCard(dto: CreateMovieDto) {
     try {
+      const genreIds = dto.genre.map((genreId) => ({ id: genreId }));
       const movie = await this.prisma.movie.create({
         data: {
           title: dto.title,
@@ -15,6 +16,9 @@ export class MoviesService {
           year: dto.year,
           typeId: dto.typeId,
           ageRating: dto.ageRating,
+          genreFilm: {
+            connect: genreIds,
+          },
         },
       });
       return movie;
@@ -25,7 +29,11 @@ export class MoviesService {
 
   async findAllMovies() {
     try {
-      const movies = await this.prisma.movie.findMany();
+      const movies = await this.prisma.movie.findMany({
+        include: {
+          genreFilm: true,
+        },
+      });
 
       return movies;
     } catch (error) {
@@ -42,11 +50,33 @@ export class MoviesService {
       if (!movie) {
         throw new HttpException(
           "Фильм с таким id не был найден",
-          HttpStatus.BAD_REQUEST
+          HttpStatus.NOT_FOUND
         );
       }
 
       return movie;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async deleteMovieById({ id }: { id: string }) {
+    try {
+      const deletedMovie = await this.prisma.movie.delete({
+        where: { id: Number(id) },
+      });
+
+      if (!deletedMovie) {
+        throw new HttpException(
+          "Фильм с таким id не был найден",
+          HttpStatus.NOT_FOUND
+        );
+      }
+
+      return {
+        message: "Фильм успешно удален",
+        deletedMovie,
+      };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
