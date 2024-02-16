@@ -18,7 +18,6 @@ export class AuthGuard implements CanActivate {
         process.env.SECRET_KEY
       );
       request.user = decoded;
-
       return true;
     } catch (error) {
       return false;

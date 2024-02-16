@@ -5,6 +5,7 @@ import { GenreFilmModule } from "./genre-film/genre-film.module";
 import { MoviesModule } from "./movies/movies.module";
 import { RoleModule } from "./role/role.module";
 import { UserModule } from "./user/user.module";
+import { FavouriteMovieModule } from './favourite-movie/favourite-movie.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from "./user/user.module";
     MoviesModule,
     FilmTypeModule,
     GenreFilmModule,
+    FavouriteMovieModule,
   ],
   controllers: [],
   providers: [],

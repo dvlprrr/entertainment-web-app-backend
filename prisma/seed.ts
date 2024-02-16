@@ -3,9 +3,9 @@ const prisma = new PrismaClient();
 
 async function seed() {
   await prisma.genreFilm.upsert({
-    where: { name: "Action" }, // Проверяем, существует ли уже жанр "Action"
-    update: {}, // Если жанр уже существует, обновляем его (не требуется в этом примере)
-    create: { name: "Action" }, // Если жанр не существует, создаем новый
+    where: { name: "Action" },
+    update: {},
+    create: { name: "Action" },
   });
 
   await prisma.genreFilm.upsert({
@@ -14,9 +14,9 @@ async function seed() {
     create: { name: "Comedy" },
   });
   await prisma.genreFilm.upsert({
-    where: { name: "Drama" }, // Проверяем, существует ли уже жанр "Action"
-    update: {}, // Если жанр уже существует, обновляем его (не требуется в этом примере)
-    create: { name: "Drama" }, // Если жанр не существует, создаем новый
+    where: { name: "Drama" },
+    update: {},
+    create: { name: "Drama" },
   });
 
   await prisma.genreFilm.upsert({
@@ -25,9 +25,9 @@ async function seed() {
     create: { name: "Fantasy" },
   });
   await prisma.genreFilm.upsert({
-    where: { name: "Horror" }, // Проверяем, существует ли уже жанр "Action"
-    update: {}, // Если жанр уже существует, обновляем его (не требуется в этом примере)
-    create: { name: "Horror" }, // Если жанр не существует, создаем новый
+    where: { name: "Horror" },
+    update: {},
+    create: { name: "Horror" },
   });
 
   await prisma.genreFilm.upsert({

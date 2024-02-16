@@ -12,7 +12,8 @@ export class AuthService {
 
   async generateToken(dto: generateTokenDto) {
     try {
-      const payload = { ...dto };
+      const payload = { email: dto.email, id: dto.id, roleId: dto.roleId };
+
       const token = jwt.sign(payload, process.env.SECRET_KEY);
 
       return token;
@@ -65,7 +66,11 @@ export class AuthService {
       let token;
 
       if (matchedPassword) {
-        token = await this.generateToken(dto);
+        token = await this.generateToken({
+          email: user.email,
+          id: user.id,
+          roleId: user.roleId,
+        });
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,10 +80,10 @@ export class AuthService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async getCurrentUser(id: number) {
     try {
       const user = await this.userService.findUserById(id);
-
       return user;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

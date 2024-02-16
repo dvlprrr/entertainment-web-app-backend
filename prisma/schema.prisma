@@ -14,11 +14,12 @@ model Role {
 }
 
 model User {
-  id       Int    @id @unique @default(autoincrement())
-  email    String @unique @db.VarChar(255)
-  password String
-  roleId   Int    @default(1)
-  role     Role   @relation(fields: [roleId], references: [id])
+  id            Int              @id @unique @default(autoincrement())
+  email         String           @unique @db.VarChar(255)
+  password      String
+  roleId        Int              @default(1)
+  role          Role             @relation(fields: [roleId], references: [id])
+  FavoriteMovie FavouriteMovie[]
 }
 
 model FilmType {
@@ -28,18 +29,27 @@ model FilmType {
 }
 
 model Movie {
-  id        Int         @id @default(autoincrement())
-  url       String
-  title     String
-  year      Int
-  typeId    Int
-  filmType  FilmType    @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ageRating String
-  genreFilm GenreFilm[]
+  id            Int              @id @default(autoincrement())
+  url           String
+  title         String
+  year          Int
+  typeId        Int
+  filmType      FilmType         @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ageRating     String
+  genreFilm     GenreFilm[]
+  favoriteMovie FavouriteMovie[]
 }
 
 model GenreFilm {
   id    Int     @id @unique @default(autoincrement())
   name  String  @unique
   Movie Movie[]
+}
+
+model FavouriteMovie {
+  id      Int   @id @unique @default(autoincrement())
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id])
+  movieId Int
+  movie   Movie @relation(fields: [movieId], references: [id])
 }

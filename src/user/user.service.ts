@@ -19,17 +19,22 @@ export class UserService {
 
   async findUserById(id: number) {
     try {
-      const user = await this.prisma.user.findFirst({
+      const user = await this.prisma.user.findUnique({
         where: {
           id,
         },
-        select: { email: true, id: true, role: true },
+        select: {
+          email: true,
+          id: true,
+          role: true,
+          FavoriteMovie: { select: { movieId: true } },
+        },
       });
 
       if (!user) {
         throw new HttpException(
           `Пользователя с id:${id} не существует`,
-          HttpStatus.BAD_REQUEST
+          HttpStatus.NOT_FOUND
         );
       }
       return user;
@@ -39,13 +44,26 @@ export class UserService {
   }
 
   async findUserByEmail(dto: findUserByEmailDto) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-    });
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: dto.email,
+        },
+      });
 
-    return user;
+      return user;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findAllUsers() {
+    try {
+      const users = this.prisma.user.findMany();
+      return users;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async updateUser(dto: updateUserDto) {
@@ -54,7 +72,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(
         "Пользователь с таким id не зарегестрирован",
-        HttpStatus.BAD_REQUEST
+        HttpStatus.NOT_FOUND
       );
     }
 
