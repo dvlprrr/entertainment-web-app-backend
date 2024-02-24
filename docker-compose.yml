@@ -1,24 +1,24 @@
-version: "3.5"
+version: "3"
 
 services:
-  entertainment_web_app_backend:
-    container_name: app_backend
+  db:
     image: postgres:16
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGDATA: /data/postgres
+      - POSTGRES_DB=entertainment
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=kirill
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - postgres:/data/postgres
+      - ./src:/app/src
     ports:
-      - "5432:5432"
-    networks:
-      - postgres
-    restart: unless-stopped
-
-networks:
-  postgres:
-    driver: bridge
-
-volumes:
-  postgres:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=entertainment
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=kirill
+      - POSTGRES_HOST=db
