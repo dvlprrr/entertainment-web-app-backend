@@ -9,6 +9,7 @@ export class MoviesService {
   async createMovieCard(dto: CreateMovieDto) {
     try {
       const genreIds = dto.genre.map((genreId) => ({ id: genreId }));
+
       const movie = await this.prisma.movie.create({
         data: {
           title: dto.title,

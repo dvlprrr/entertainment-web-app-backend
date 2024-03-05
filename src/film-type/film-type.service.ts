@@ -18,9 +18,12 @@ export class FilmTypeService {
   }
 
   async findAllTypes() {
-    const filmTypes = await this.prisma.filmType.findMany();
-
-    return filmTypes;
+    try {
+      const filmTypes = await this.prisma.filmType.findMany();
+      return filmTypes;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
   async updateType(dto: UpdateFilmTypeDto, id: string) {
     try {

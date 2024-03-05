@@ -1,4 +1,8 @@
-import { CanActivate, ExecutionContext } from "@nestjs/common";
+import {
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from "@nestjs/common";
 import * as jwt from "jsonwebtoken";
 
 export class AuthGuard implements CanActivate {
@@ -6,22 +10,29 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = request.headers["authorization"];
+    const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      return false;
+      throw new UnauthorizedException();
     }
 
     try {
-      const decoded = jwt.verify(
-        token.replace("Bearer ", ""),
-        process.env.SECRET_KEY
-      );
-      request.user = decoded;
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-      return true;
-    } catch (error) {
-      return false;
+      request["user"] = decoded;
+    } catch {
+      throw new UnauthorizedException();
     }
+    return true;
+  }
+
+  private extractTokenFromHeader(request: any): string | undefined {
+    const authorizationHeader = request.headers["authorization"];
+    if (!authorizationHeader) {
+      return undefined;
+    }
+
+    const [type, token] = authorizationHeader.split(" ");
+    return type === "Bearer" ? token : undefined;
   }
 }
