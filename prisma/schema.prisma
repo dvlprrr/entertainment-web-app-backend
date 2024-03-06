@@ -17,6 +17,7 @@ model User {
   id            Int              @id @unique @default(autoincrement())
   email         String           @unique @db.VarChar(255)
   password      String
+  avatar        String           @default("https://i.pngimg.me/thumb/f/720/c3f2c592f9.jpg")
   roleId        Int              @default(1)
   role          Role             @relation(fields: [roleId], references: [id])
   FavoriteMovie FavouriteMovie[]
@@ -35,9 +36,10 @@ model Movie {
   year          Int
   typeId        Int
   filmType      FilmType         @relation(fields: [typeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ageRating     String
   genreFilm     GenreFilm[]
   favoriteMovie FavouriteMovie[]
+  AgeRating     AgeRating        @relation(fields: [ageRatingId], references: [id])
+  ageRatingId   Int
 }
 
 model GenreFilm {
@@ -52,4 +54,10 @@ model FavouriteMovie {
   user    User  @relation(fields: [userId], references: [id])
   movieId Int
   movie   Movie @relation(fields: [movieId], references: [id])
+}
+
+model AgeRating {
+  id    Int     @id @unique @default(autoincrement())
+  name  String  @unique
+  movie Movie[]
 }

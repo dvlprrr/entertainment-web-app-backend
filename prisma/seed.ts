@@ -7,7 +7,6 @@ async function seed() {
     update: {},
     create: { name: "Action" },
   });
-
   await prisma.genreFilm.upsert({
     where: { name: "Comedy" },
     update: {},
@@ -29,7 +28,6 @@ async function seed() {
     update: {},
     create: { name: "Horror" },
   });
-
   await prisma.genreFilm.upsert({
     where: { name: "Mystery" },
     update: {},
@@ -49,6 +47,53 @@ async function seed() {
     where: { name: "Western" },
     update: {},
     create: { name: "Western" },
+  });
+
+  await prisma.role.upsert({
+    where: { name: "User" },
+    update: {},
+    create: { name: "User" },
+  });
+  await prisma.role.upsert({
+    where: { name: "Admin" },
+    update: {},
+    create: { name: "Admin" },
+  });
+
+  await prisma.filmType.upsert({
+    where: { type: "Movie" },
+    update: {},
+    create: { type: "Movie" },
+  });
+  await prisma.filmType.upsert({
+    where: { type: "TV Series" },
+    update: {},
+    create: { type: "TV Series" },
+  });
+  await prisma.ageRating.upsert({
+    where: { name: "G" },
+    update: {},
+    create: { name: "G" },
+  });
+  await prisma.ageRating.upsert({
+    where: { name: "PG" },
+    update: {},
+    create: { name: "PG" },
+  });
+  await prisma.ageRating.upsert({
+    where: { name: "PG-13" },
+    update: {},
+    create: { name: "PG-13" },
+  });
+  await prisma.ageRating.upsert({
+    where: { name: "R" },
+    update: {},
+    create: { name: "R" },
+  });
+  await prisma.ageRating.upsert({
+    where: { name: "NC-17" },
+    update: {},
+    create: { name: "NC-17" },
   });
 }
 
