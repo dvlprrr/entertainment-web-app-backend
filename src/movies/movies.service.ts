@@ -16,7 +16,7 @@ export class MoviesService {
           url: dto.url,
           year: dto.year,
           typeId: dto.typeId,
-          ageRating: dto.ageRating,
+          ageRatingId: dto.ageRatingId,
           genreFilm: {
             connect: genreIds,
           },

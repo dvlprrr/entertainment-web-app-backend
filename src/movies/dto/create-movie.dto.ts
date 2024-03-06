@@ -3,6 +3,6 @@ export interface CreateMovieDto {
   url: string;
   year: number;
   typeId: number;
-  ageRating: string;
+  ageRatingId: number;
   genre: number[];
 }
