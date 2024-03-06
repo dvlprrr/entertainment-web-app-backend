@@ -22,7 +22,7 @@ export class AuthController {
   @Get("me")
   getCurrentUser(@Req() req) {
     const user = req.user;
-    console.log(user);
+
     return this.authService.getCurrentUser(user.id);
   }
 }

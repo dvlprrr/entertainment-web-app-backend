@@ -37,11 +37,14 @@ export class AuthService {
 
       const hashedPassword = await bcrypt.hash(dto.password, 10);
 
-      const user = await this.userService.createUser({
+      const data = await this.userService.createUser({
         email: dto.email,
         password: hashedPassword,
+        avatar: "https://i.pngimg.me/thumb/f/720/c3f2c592f9.jpg",
         roleId: dto.roleId ?? 1,
       });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...user } = data;
       return {
         message: "User has been successfully created",
         user,
