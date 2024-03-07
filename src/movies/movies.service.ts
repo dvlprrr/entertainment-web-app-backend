@@ -31,12 +31,26 @@ export class MoviesService {
   async findAllMovies() {
     try {
       const movies = await this.prisma.movie.findMany({
-        include: {
+        select: {
+          id: true,
+          url: true,
+          title: true,
+          year: true,
+          filmType: { select: { type: true } },
+          AgeRating: { select: { name: true } },
           genreFilm: true,
         },
       });
-
-      return movies;
+      const res = movies.map((movie) => ({
+        id: movie.id,
+        url: movie.url,
+        title: movie.title,
+        year: movie.year,
+        filmType: movie.filmType.type,
+        ageRating: movie.AgeRating.name,
+        genreFilm: movie.genreFilm,
+      }));
+      return res;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
