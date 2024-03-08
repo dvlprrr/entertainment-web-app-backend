@@ -11,13 +11,13 @@ import { RoleService } from "./role.service";
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
-  @Roles(Role.Admin)
+  @Roles(Role.ADMIN)
   @Post()
   createRole(@Body() dto: createRoleDto) {
     return this.roleService.createRole(dto);
   }
 
-  @Roles(Role.Admin)
+  @Roles(Role.ADMIN)
   @Get("")
   getAllRoles() {
     return this.roleService.getAllRoles();

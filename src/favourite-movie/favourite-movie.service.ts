@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { groupBy } from "lodash";
 import { PrismaService } from "src/prisma.service";
-import { FavouriteMovieDto } from "./dto/favourite-movie-type.dto";
 @Injectable()
 export class FavouriteMovieService {
   constructor(private prisma: PrismaService) {}
@@ -94,7 +93,7 @@ export class FavouriteMovieService {
     }
   }
 
-  async deleteFavouriteMovie(dto: FavouriteMovieDto, userId: number) {
+  async deleteFavouriteMovie(dto: { movieId: number }, userId: number) {
     try {
       const deletedFavourite = await this.prisma.favouriteMovie.deleteMany({
         where: {

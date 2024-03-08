@@ -1,13 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
-import { CreateFilmTypeDto } from "./dto/create-film-type.dto";
-import { UpdateFilmTypeDto } from "./dto/update-film-type.dto";
 
 @Injectable()
 export class FilmTypeService {
   constructor(private prisma: PrismaService) {}
 
-  async createFilmType(dto: CreateFilmTypeDto) {
+  async createFilmType(dto: { type: string }) {
     try {
       const filmType = await this.prisma.filmType.create({ data: dto });
 
@@ -25,7 +23,7 @@ export class FilmTypeService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
-  async updateType(dto: UpdateFilmTypeDto, id: string) {
+  async updateType(dto: { type: string }, id: string) {
     try {
       const updatedFilmType = await this.prisma.filmType.update({
         where: { id: Number(id) },

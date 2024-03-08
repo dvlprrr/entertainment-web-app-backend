@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "src/auth/auth.guard";
-import { FavouriteMovieDto } from "./dto/favourite-movie-type.dto";
+
 import { FavouriteMovieService } from "./favourite-movie.service";
 
 @Controller("favourite-movie")
@@ -18,16 +18,16 @@ export class FavouriteMovieController {
   constructor(private readonly favouriteMovieService: FavouriteMovieService) {}
 
   @Post()
-  addFavourites(@Body() dto: FavouriteMovieDto, @Req() req) {
+  addFavourites(@Body() dto: { movieId: number }, @Req() req) {
     const { id } = req.user;
 
     return this.favouriteMovieService.addFavourites(dto.movieId, id);
   }
 
   @Delete()
-  deleteFavourite(@Body() movieId: FavouriteMovieDto, @Req() req) {
+  deleteFavourite(@Body() dto: { movieId: number }, @Req() req) {
     const { id } = req.user;
-    return this.favouriteMovieService.deleteFavouriteMovie(movieId, id);
+    return this.favouriteMovieService.deleteFavouriteMovie(dto, id);
   }
 
   @Get()

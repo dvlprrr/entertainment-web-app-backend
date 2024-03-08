@@ -7,8 +7,6 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
-import { CreateFilmTypeDto } from "./dto/create-film-type.dto";
-import { UpdateFilmTypeDto } from "./dto/update-film-type.dto";
 import { FilmTypeService } from "./film-type.service";
 
 @Controller("film-type")
@@ -16,7 +14,7 @@ export class FilmTypeController {
   constructor(private readonly filmTypeService: FilmTypeService) {}
 
   @Post()
-  createFilmType(@Body() dto: CreateFilmTypeDto) {
+  createFilmType(@Body() dto: { type: string }) {
     return this.filmTypeService.createFilmType(dto);
   }
 
@@ -26,7 +24,7 @@ export class FilmTypeController {
   }
 
   @Patch(":id")
-  updateType(@Body() dto: UpdateFilmTypeDto, @Param("id") id: string) {
+  updateType(@Body() dto: { type: string }, @Param("id") id: string) {
     return this.filmTypeService.updateType(dto, id);
   }
 
