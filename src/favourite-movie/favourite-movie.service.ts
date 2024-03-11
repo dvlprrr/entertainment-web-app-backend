@@ -69,6 +69,7 @@ export class FavouriteMovieService {
             include: {
               AgeRating: { select: { name: true } },
               filmType: { select: { type: true } },
+              genreFilm: { select: { name: true } },
             },
           },
         },
@@ -82,6 +83,9 @@ export class FavouriteMovieService {
             year: movie.year,
             ageRating: movie.AgeRating.name,
             filmType: movie.filmType.type,
+            genres: movie.genreFilm.map((genre) => {
+              return genre.name;
+            }),
           })),
           "filmType"
         ),
@@ -91,6 +95,39 @@ export class FavouriteMovieService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async findMostPopularMovie() {
+    try {
+      const movie = await this.prisma.movie.findMany({
+        take: 1,
+        orderBy: [{ favoriteMovie: { _count: "desc" } }],
+        select: {
+          id: true,
+          title: true,
+          url: true,
+          year: true,
+          filmType: { select: { type: true } },
+          AgeRating: { select: { name: true } },
+          genreFilm: { select: { name: true } },
+        },
+      });
+
+      const res = movie.map((item) => {
+        return {
+          id: item.id,
+          title: item.title,
+          url: item.url,
+          year: item.year,
+          filmType: item.filmType.type,
+          ageRating: item.AgeRating.name,
+          genres: item.genreFilm.map((item) => {
+            return item.name;
+          }),
+        };
+      })[0];
+      return res;
+    } catch (error) {}
   }
 
   async deleteFavouriteMovie(dto: { movieId: number }, userId: number) {

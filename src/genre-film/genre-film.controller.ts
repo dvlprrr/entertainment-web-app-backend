@@ -25,6 +25,11 @@ export class GenreFilmController {
     return this.genreFilmService.findAllGenres();
   }
 
+  @Get("popular")
+  findMostPopularGenres() {
+    return this.genreFilmService.findMostPopularGenres();
+  }
+
   @Patch(":id")
   updateGenreName(@Body() dto: UpdateGenreFilmDto, @Param("id") id: string) {
     return this.genreFilmService.updateGenreName(dto, id);
