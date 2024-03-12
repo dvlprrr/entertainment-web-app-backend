@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { knexService } from "knex/knex.service";
 import { PrismaService } from "src/prisma.service";
 import { CreateGenreFilmDto } from "./dto/create-genre-film.dto";
 import { UpdateGenreFilmDto } from "./dto/update-genre-film.dto";
 
-const knex = require("knex")({
-  client: "pg",
-  connection: {
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-  },
-});
 @Injectable()
 export class GenreFilmService {
   constructor(private readonly prisma: PrismaService) {}
@@ -31,8 +23,20 @@ export class GenreFilmService {
 
   async findAllGenres() {
     try {
-      const genres = await this.prisma.genreFilm.findMany();
-      return genres;
+      const genres = await knexService("GenreFilm")
+        .select("GenreFilm.id", "name", knexService.raw("count(name)"))
+        .join("_GenreFilmToMovie", "GenreFilm.id", "=", "_GenreFilmToMovie.A")
+        .join("Movie", "Movie.id", "=", "_GenreFilmToMovie.B")
+        .join("FavouriteMovie", "Movie.id", "=", "FavouriteMovie.movieId")
+        .groupBy("GenreFilm.id");
+      const res = genres.map((genre) => {
+        return {
+          id: genre.id,
+          name: genre.name,
+          count: Number(genre.count),
+        };
+      });
+      return res;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -52,7 +56,7 @@ export class GenreFilmService {
 
   async findMostPopularGenres() {
     try {
-      const res = await knex("GenreFilm")
+      const res = await knexService("GenreFilm")
         .select("name")
         .join("_GenreFilmToMovie", "GenreFilm.id", "=", "_GenreFilmToMovie.A")
         .join("Movie", "Movie.id", "=", "_GenreFilmToMovie.B")

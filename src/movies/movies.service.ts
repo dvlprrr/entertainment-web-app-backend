@@ -56,24 +56,24 @@ export class MoviesService {
     }
   }
 
-  async findMovieById({ id }: { id: string }) {
-    try {
-      const movie = await this.prisma.movie.findUnique({
-        where: { id: Number(id) },
-      });
+  // async findMovieById({ id }: { id: string }) {
+  //   try {
+  //     const movie = await this.prisma.movie.findUnique({
+  //       where: { id: Number(id) },
+  //     });
 
-      if (!movie) {
-        throw new HttpException(
-          "Фильм с таким id не был найден",
-          HttpStatus.NOT_FOUND
-        );
-      }
+  //     if (!movie) {
+  //       throw new HttpException(
+  //         "Фильм с таким id не был найден",
+  //         HttpStatus.NOT_FOUND
+  //       );
+  //     }
 
-      return movie;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
+  //     return movie;
+  //   } catch (error) {
+  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
 
   async deleteMovieById({ id }: { id: string }) {
     try {

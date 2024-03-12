@@ -16,11 +16,6 @@ export class MoviesController {
     return this.moviesService.findAllMovies();
   }
 
-  // @Get(":id")
-  // findMovieById(@Param() id: { id: string }) {
-  //   return this.moviesService.findMovieById(id);
-  // }
-
   @Delete(":id")
   deleteMovieById(@Param() id: { id: string }) {
     return this.moviesService.deleteMovieById(id);

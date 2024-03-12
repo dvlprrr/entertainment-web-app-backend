@@ -7,6 +7,7 @@ import { RoleModule } from "./role/role.module";
 import { UserModule } from "./user/user.module";
 import { FavouriteMovieModule } from './favourite-movie/favourite-movie.module';
 import { AgeRatingModule } from './age-rating/age-rating.module';
+import { TrendingMoviesModule } from './trending-movies/trending-movies.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AgeRatingModule } from './age-rating/age-rating.module';
     GenreFilmModule,
     FavouriteMovieModule,
     AgeRatingModule,
+    TrendingMoviesModule,
   ],
   controllers: [],
   providers: [],
