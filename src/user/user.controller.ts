@@ -18,9 +18,9 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Patch()
   updateUser(@Body() dto: updateUserDto, @Req() req) {
-    const { email } = dto;
+    const { email, avatar } = dto;
     const { id } = req.user;
-    const updatedUser = this.userService.updateUser(email, id);
+    const updatedUser = this.userService.updateUser(email, avatar, id);
 
     return updatedUser;
   }

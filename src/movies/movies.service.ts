@@ -28,9 +28,10 @@ export class MoviesService {
     }
   }
 
-  async findAllMovies() {
+  async findAllMovies(filterValue: string) {
     try {
       const movies = await this.prisma.movie.findMany({
+        where: { title: { contains: filterValue } },
         select: {
           id: true,
           url: true,
@@ -38,7 +39,7 @@ export class MoviesService {
           year: true,
           filmType: { select: { type: true } },
           AgeRating: { select: { name: true } },
-          genreFilm: true,
+          genreFilm: { select: { name: true } },
         },
       });
       const res = movies.map((movie) => ({
@@ -48,7 +49,7 @@ export class MoviesService {
         year: movie.year,
         filmType: movie.filmType.type,
         ageRating: movie.AgeRating.name,
-        genreFilm: movie.genreFilm,
+        genreFilm: movie.genreFilm.map((genre) => genre.name),
       }));
       return res;
     } catch (error) {
@@ -56,25 +57,65 @@ export class MoviesService {
     }
   }
 
-  // async findMovieById({ id }: { id: string }) {
-  //   try {
-  //     const movie = await this.prisma.movie.findUnique({
-  //       where: { id: Number(id) },
-  //     });
+  async findTvSeries(filterValue: string) {
+    try {
+      const tvSeries = await this.prisma.movie.findMany({
+        where: { AND: [{ typeId: 2 }, { title: { contains: filterValue } }] },
+        select: {
+          id: true,
+          url: true,
+          title: true,
+          year: true,
+          filmType: { select: { type: true } },
+          AgeRating: { select: { name: true } },
+          genreFilm: { select: { name: true } },
+        },
+      });
 
-  //     if (!movie) {
-  //       throw new HttpException(
-  //         "Фильм с таким id не был найден",
-  //         HttpStatus.NOT_FOUND
-  //       );
-  //     }
+      const res = await tvSeries.map((movie) => ({
+        id: movie.id,
+        url: movie.url,
+        title: movie.title,
+        year: movie.year,
+        filmType: movie.filmType.type,
+        ageRating: movie.AgeRating.name,
+        genreFilm: movie.genreFilm.map((genre) => genre.name),
+      }));
+      return res;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 
-  //     return movie;
-  //   } catch (error) {
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
+  async findMovies(filterValue: string) {
+    try {
+      const movies = await this.prisma.movie.findMany({
+        where: { AND: [{ typeId: 1 }, { title: { contains: filterValue } }] },
+        select: {
+          id: true,
+          url: true,
+          title: true,
+          year: true,
+          filmType: { select: { type: true } },
+          AgeRating: { select: { name: true } },
+          genreFilm: { select: { name: true } },
+        },
+      });
 
+      const res = await movies.map((movie) => ({
+        id: movie.id,
+        url: movie.url,
+        title: movie.title,
+        year: movie.year,
+        filmType: movie.filmType.type,
+        ageRating: movie.AgeRating.name,
+        genreFilm: movie.genreFilm.map((genre) => genre.name),
+      }));
+      return res;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
   async deleteMovieById({ id }: { id: string }) {
     try {
       const deletedMovie = await this.prisma.movie.delete({

@@ -28,7 +28,8 @@ export class GenreFilmService {
         .join("_GenreFilmToMovie", "GenreFilm.id", "=", "_GenreFilmToMovie.A")
         .join("Movie", "Movie.id", "=", "_GenreFilmToMovie.B")
         .join("FavouriteMovie", "Movie.id", "=", "FavouriteMovie.movieId")
-        .groupBy("GenreFilm.id");
+        .groupBy("GenreFilm.id")
+        .orderBy("GenreFilm.id");
       const res = genres.map((genre) => {
         return {
           id: genre.id,

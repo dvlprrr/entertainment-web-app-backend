@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async updateUser(email: string, id: number) {
+  async updateUser(email: string, avatar: string, id: number) {
     const user = await this.findUserById(id);
 
     if (!user) {
@@ -82,12 +82,14 @@ export class UserService {
       );
     }
 
-    const updatedUser = await this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id },
-      data: { email },
+      data: { email, avatar },
     });
 
-    return updatedUser;
+    return {
+      message: "Данные пользователя успешно обновленны",
+    };
   }
 
   async deleteUser(id: number) {

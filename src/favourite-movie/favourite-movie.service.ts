@@ -61,7 +61,7 @@ export class FavouriteMovieService {
         where: {
           AND: [
             { userId: id },
-            { movie: { title: { startsWith: `${filterValue}` } } },
+            { movie: { title: { contains: filterValue } } },
           ],
         },
         select: {
@@ -110,6 +110,7 @@ export class FavouriteMovieService {
           filmType: { select: { type: true } },
           AgeRating: { select: { name: true } },
           genreFilm: { select: { name: true } },
+          _count: true,
         },
       });
 
@@ -124,6 +125,7 @@ export class FavouriteMovieService {
           genres: item.genreFilm.map((item) => {
             return item.name;
           }),
+          count: item._count,
         };
       })[0];
       return res;
