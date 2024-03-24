@@ -26,6 +26,7 @@ export class UserService {
           avatar: true,
           id: true,
           role: true,
+          FavoriteMovie: { select: { movieId: true } },
         },
       });
 
@@ -41,6 +42,9 @@ export class UserService {
         email: user.email,
         avatar: user.avatar,
         role_id: user.role.id,
+        favourite_movies: user.FavoriteMovie.map((movie) => {
+          return movie.movieId;
+        }),
       };
 
       return res;

@@ -23,9 +23,7 @@ export class FavouriteMovieService {
               movieId,
             },
           });
-          return {
-            message: "Вы успешно удалили фильм из избранного",
-          };
+          return movieId;
         } catch (error) {
           throw new HttpException(
             `Failed to delete favourite: ${error.message}`,
@@ -37,9 +35,7 @@ export class FavouriteMovieService {
           await this.prisma.favouriteMovie.create({
             data: { movieId, userId },
           });
-          return {
-            message: "Вы успешно добавили фильм в избранное",
-          };
+          return movieId;
         } catch (error) {
           throw new HttpException(
             `Failed to add to favourites: ${error.message}`,
