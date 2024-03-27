@@ -60,6 +60,7 @@ export class FavouriteMovieService {
             { movie: { title: { contains: filterValue } } },
           ],
         },
+        orderBy: { movie: { filmType: { type: "asc" } } },
         select: {
           movie: {
             include: {
