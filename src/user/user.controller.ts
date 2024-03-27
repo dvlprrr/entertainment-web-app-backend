@@ -34,4 +34,9 @@ export class UserController {
   findAllUsers() {
     return this.userService.findAllUsers();
   }
+
+  @Get("count")
+  countAllUsers() {
+    return this.userService.countAllUsers();
+  }
 }

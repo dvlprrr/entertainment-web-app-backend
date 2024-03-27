@@ -114,4 +114,10 @@ export class UserService {
       deletedUser,
     };
   }
+
+  async countAllUsers() {
+    const countUsers = await this.prisma.user.count();
+
+    return countUsers;
+  }
 }
