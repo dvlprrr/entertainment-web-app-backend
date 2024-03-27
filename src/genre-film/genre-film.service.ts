@@ -34,7 +34,7 @@ export class GenreFilmService {
         return {
           id: genre.id,
           name: genre.name,
-          count: Number(genre.count),
+          appearanceCount: Number(genre.count),
         };
       });
       return res;
